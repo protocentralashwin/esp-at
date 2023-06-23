@@ -199,7 +199,7 @@ def at_patch_if_config(platform, module):
 
     fabspath = os.path.join(config_dir, 'patch.py')
     if os.path.exists(fabspath):
-        cmd = 'python {}'.format(fabspath)
+        cmd = 'python3 {}'.format(fabspath)
         if subprocess.call(cmd, shell = True):
             raise Exception('apply patch {} failed'.format(fabspath))
 
@@ -213,9 +213,9 @@ def build_project(platform_name, module_name, silence, build_args):
         sys_python_path = sys.executable
     else:
         if os.environ.get('IDF_PYTHON_ENV_PATH') is None:
-            sys_python_path = 'python'
+            sys_python_path = 'python3'
         else:
-            sys_python_path = os.path.join(os.environ.get('IDF_PYTHON_ENV_PATH'), 'bin', 'python')
+            sys_python_path = os.path.join(os.environ.get('IDF_PYTHON_ENV_PATH'), 'bin', 'python3')
 
     exp_macro_cmd = ''
     for item in at_macro_pairs:
@@ -471,7 +471,7 @@ def install_prerequisites():
     if sys.platform == 'linux':
         cmd = 'sudo apt-get install git wget flex bison gperf python3 python3-pip python3-venv python3-setuptools cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0'
     elif sys.platform == 'darwin':
-        cmd = 'sudo easy_install pip && brew install cmake ninja dfu-util ccache python3'
+        cmd = 'brew install cmake ninja dfu-util ccache python3'
     elif sys.platform == 'win32':
         print('Windows Installer Download has already installed all prerequisites.')
     elif sys.platform == 'linux2':
@@ -479,10 +479,10 @@ def install_prerequisites():
     else:
         raise Exception('unsupported platform: {} till now.'.format(sys.platform))
 
-    if not os.environ.get('HAS_IDF_PREREQUISITES'):
-        ret = subprocess.call(cmd, shell = True)
-        if ret:
-            raise Exception('install prerequisites failed! Please manually run:\r\n{}'.format(cmd))
+    #if not os.environ.get('HAS_IDF_PREREQUISITES'):
+    #    ret = subprocess.call(cmd, shell = True)
+    #    if ret:
+    #        raise Exception('install prerequisites failed! Please manually run:\r\n{}'.format(cmd))
 
     # install ESP-AT prerequisites
     ESP_LOGI('Ready to install ESP-AT prerequisites..')
